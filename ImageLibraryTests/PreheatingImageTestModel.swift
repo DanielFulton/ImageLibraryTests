@@ -21,16 +21,25 @@ func urlWithDateString(dateString:String) -> NSURL {
     return NSURL(string: apodBaseURL + apiKeyParameterPrefix + apiKey + dateParameterPrefix + dateString)!
    
 }
-enum PreheatingModelImageResponse {
-    case success(UIImage)
+enum PreheatingModelURLResponse {
+    case success(NSURL)
     case error(ErrorType)
 }
-typealias imageFetchCompletion = (PreheatingModelImageResponse) -> Void
-func getImageWithCompletion(url:NSURL, completion:imageFetchCompletion) {
+typealias imageURLCompletion = (PreheatingModelURLResponse) -> Void
+func getImageURLWithCompletion(url:NSURL, completion:imageURLCompletion) {
     dataForURL(url) { (response) in
         switch response {
         case .success(let data):
-            JSONDictForData(data)
+            JSONDictForData(data, completion: { (response) in
+                switch response {
+                case .success(let obj):
+                    let newURL = urlForDict(obj as NSDictionary)
+                    completion(.success(newURL))
+                case .error(let newError):
+                    completion(.error(newError))
+                }
+                
+            })
         case .error(let error):
             completion(PreheatingModelImageResponse.error(error))
         }
@@ -55,13 +64,18 @@ func dataForURL(url:NSURL, completion:dataFetchCompletion) { // async
     task.resume()
 }
 
-func JSONDictForData(data:NSData) -> AnyObject? {
+enum JSONDictResponse {
+    case success(AnyObject)
+    case error(ErrorType)
+}
+typealias jsonDictCompletion = (JSONDictResponse) -> Void
+func JSONDictForData(data:NSData, completion:jsonDictCompletion) {
     do {
         let result = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-        return result
+        completion(.success(result))
     } catch {
         print("error making JSON dict")
-        return nil
+        completion(.error(error))
     }
 }
 

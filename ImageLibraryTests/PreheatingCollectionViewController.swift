@@ -58,7 +58,12 @@ class PreheatingCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
-        
+        let imageURL = getImageURLWithCompletion(urls[indexPath.row]) { (response) in
+            switch response {
+            case .success(let imageURL):
+                //self.result?.libraryType.fetchImage
+            }
+        }
         // Configure the cell
 //        let customCell = cell as! PreheatingCollectionViewCell
 //        if let currentResult = self.result {
