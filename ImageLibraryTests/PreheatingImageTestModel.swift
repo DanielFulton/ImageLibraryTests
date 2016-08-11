@@ -11,7 +11,7 @@ import UIKit
 let apodBaseURL = "https://api.nasa.gov/planetary/apod"
 let apiKeyParameterPrefix = "?api_key="
 let dateParameterPrefix = "&date="
-let apiKey = ""
+let apiKey = "O4AoipwD2XgddSscZ0ZzDKYHaTzg0Z9xCU20f9Hv"
 var urls:[NSURL] = []
 func preparePreheatingModel() {
     urls = lastHundredDays()!
@@ -33,15 +33,15 @@ func getImageURLWithCompletion(url:NSURL, completion:imageURLCompletion) {
             JSONDictForData(data, completion: { (response) in
                 switch response {
                 case .success(let obj):
-                    let newURL = urlForDict(obj as NSDictionary)
-                    completion(.success(newURL))
+                    let newURL = urlForDict(obj as! NSDictionary)
+                    completion(PreheatingModelURLResponse.success(newURL!))
                 case .error(let newError):
                     completion(.error(newError))
                 }
                 
             })
         case .error(let error):
-            completion(PreheatingModelImageResponse.error(error))
+            completion(PreheatingModelURLResponse.error(error))
         }
     }
 }

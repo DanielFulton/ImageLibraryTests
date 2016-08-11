@@ -125,3 +125,9 @@ enum ImageCacheLibrary:Int {
         return op
     }
 }
+
+class ImageQueueSingleton {
+    static let sharedInstance:ImageQueueSingleton = ImageQueueSingleton() {
+        return ImageQueueSingleton()
+    }
+}

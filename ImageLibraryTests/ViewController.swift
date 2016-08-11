@@ -41,8 +41,11 @@ class ViewController: UIViewController,UICollectionViewDataSource,UICollectionVi
         let result:SingleTestResult = model.results[indexPath.row]
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! SIngleImageTestCell
         cell.resultLabel.text = result.displayString()
-        self.selectedResult = result
         return cell
+    }
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        self.selectedResult = model.results[indexPath.row]
+        self.performSegueWithIdentifier("preheat", sender: self)
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using [segue destinationViewController].

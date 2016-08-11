@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "preheatingCell"
 
 class PreheatingCollectionViewController: UICollectionViewController {
     @IBAction func dismissSwipe(sender: AnyObject) {
@@ -22,7 +22,7 @@ class PreheatingCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        //self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
         
@@ -57,19 +57,18 @@ class PreheatingCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
-        let imageURL = getImageURLWithCompletion(urls[indexPath.row]) { (response) in
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PreheatingCollectionViewCell
+        cell.imageView.image = nil
+        getImageURLWithCompletion(urls[indexPath.row]) { (response) in
             switch response {
             case .success(let imageURL):
-                //self.result?.libraryType.fetchImage
+                if (collectionView.cellForItemAtIndexPath(indexPath) != nil) {
+                    self.result?.libraryType.fetchImage(cell.imageView, url: imageURL)
+                }
+            case .error( _):
+                return
             }
         }
-        // Configure the cell
-//        let customCell = cell as! PreheatingCollectionViewCell
-//        if let currentResult = self.result {
-//            
-//            //currentResult.libraryType.fetchImage(customCell.imageView, url: urls[indexPath.row])
-//        }
         return cell
     }
 
