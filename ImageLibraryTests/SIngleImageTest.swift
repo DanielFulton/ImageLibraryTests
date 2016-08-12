@@ -47,7 +47,11 @@ func setupOperations(imageView:UIImageView) {
     }
     while let library = ImageCacheLibrary(rawValue:n) {
         let newOp = NSBlockOperation.init(block: { 
-            library.fetchImage(imageView, url: url)
+            library.fetchImage(imageView, url: url, completion: { (result) in
+                if result != nil {
+                    model.results.append(result!)
+                }
+            })
         })
         operations.append(newOp)
         n += 1

@@ -12,12 +12,16 @@ private let reuseIdentifier = "preheatingCell"
 
 class PreheatingCollectionViewController: UICollectionViewController {
     @IBAction func dismissSwipe(sender: AnyObject) {
-        
+        if (self.presentingViewController != nil) {
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: { 
+                
+            })
+        }
     }
     var result:SingleTestResult? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -59,19 +63,27 @@ class PreheatingCollectionViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! PreheatingCollectionViewCell
         cell.imageView.image = nil
+        //prefetchURLs(indexPath.row+10...indexPath.row+10)
         getImageURLWithCompletion(urls[indexPath.row]) { (response) in
             switch response {
             case .success(let imageURL):
                 if (collectionView.cellForItemAtIndexPath(indexPath) != nil) {
-                    self.result?.libraryType.fetchImage(cell.imageView, url: imageURL)
+                    self.result?.libraryType.fetchImage(cell.imageView, url: imageURL, completion: { (result) in
+                    })
                 }
             case .error( _):
+                print("couldnt get image URL")
                 return
             }
         }
         return cell
     }
 
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if (self.presentingViewController != nil) {
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
     // MARK: UICollectionViewDelegate
 
     /*

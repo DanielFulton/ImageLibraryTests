@@ -20,7 +20,9 @@ class ViewController: UIViewController,UICollectionViewDataSource,UICollectionVi
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.updateModel), name: "update", object: nil)
         setupOperations(self.imageView)
     }
-    
+    override func viewDidAppear(animated: Bool) {
+        preparePreheatingModel()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -40,6 +42,7 @@ class ViewController: UIViewController,UICollectionViewDataSource,UICollectionVi
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let result:SingleTestResult = model.results[indexPath.row]
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! SIngleImageTestCell
+        cell.resultLabel.text = nil
         cell.resultLabel.text = result.displayString()
         return cell
     }
@@ -52,7 +55,6 @@ class ViewController: UIViewController,UICollectionViewDataSource,UICollectionVi
         // Pass the selected object to the new view controller.
         let destinationVC = segue.destinationViewController as! PreheatingCollectionViewController
         destinationVC.result = self.selectedResult
-        preparePreheatingModel()
     }
 }
 

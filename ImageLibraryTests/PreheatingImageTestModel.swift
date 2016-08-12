@@ -11,10 +11,39 @@ import UIKit
 let apodBaseURL = "https://api.nasa.gov/planetary/apod"
 let apiKeyParameterPrefix = "?api_key="
 let dateParameterPrefix = "&date="
-let apiKey = "O4AoipwD2XgddSscZ0ZzDKYHaTzg0Z9xCU20f9Hv"
+let apiKey = ""
 var urls:[NSURL] = []
+var imageLinkDict:[NSURL:NSURL] = [:]
 func preparePreheatingModel() {
     urls = lastHundredDays()!
+    //prefetchURLs(0...19)
+}
+
+func prefetchURLs(range:Range<Int>) {
+    guard range.startIndex < urls.count && range.endIndex < urls.count else {
+        return
+    }
+    let queue = NSOperationQueue()
+    queue.maxConcurrentOperationCount = 1
+    for index in range.startIndex...range.endIndex {
+        let url = urls[index]
+        if imageLinkDict[url] != nil {
+            continue
+        } else {
+            let op = NSBlockOperation(block: { 
+                getImageURLWithCompletion(url, completion: { (response) in
+                    switch response {
+                    case .success(let imageURL):
+                        imageLinkDict[url] = imageURL
+                    default: break
+                    }
+                })
+            })
+            op.qualityOfService = .Utility
+            queue.addOperation(op)
+        }
+        
+    }
 }
 
 func urlWithDateString(dateString:String) -> NSURL {
@@ -27,6 +56,10 @@ enum PreheatingModelURLResponse {
 }
 typealias imageURLCompletion = (PreheatingModelURLResponse) -> Void
 func getImageURLWithCompletion(url:NSURL, completion:imageURLCompletion) {
+    if let imageURL = imageLinkDict[url] {
+        completion(PreheatingModelURLResponse.success(imageURL))
+        return
+    }
     dataForURL(url) { (response) in
         switch response {
         case .success(let data):
