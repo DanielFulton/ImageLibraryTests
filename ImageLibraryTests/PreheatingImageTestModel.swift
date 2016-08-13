@@ -11,7 +11,7 @@ import UIKit
 let apodBaseURL = "https://api.nasa.gov/planetary/apod"
 let apiKeyParameterPrefix = "?api_key="
 let dateParameterPrefix = "&date="
-let apiKey = ""
+let apiKey = "DEMOKEY"
 var urls:[NSURL] = []
 var imageLinkDict:[NSURL:NSURL] = [:]
 func preparePreheatingModel() {

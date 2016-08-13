@@ -36,7 +36,7 @@ enum ImageCacheLibrary:Int {
                     }
                     let elapsed = CACurrentMediaTime()
                     print("kingfisher finished in \(elapsed - interval) seconds")
-                    completion(result: TestResult(libraryName: "kingfisher", elapsedTime: elapsed - interval, libraryType: .kingfisher))
+                    completion(result: TestResult(libraryName: "Kingfisher", elapsedTime: elapsed - interval, libraryType: .kingfisher))
                     testNextOperation()
                 }
             })
@@ -49,7 +49,7 @@ enum ImageCacheLibrary:Int {
                 }) { (image) in
                     let hanekeFinishTime = CACurrentMediaTime()
                     print("haneke finished in \(hanekeFinishTime - hanekeStartTime) seconds")
-                    completion(result: TestResult(libraryName: "haneke", elapsedTime: hanekeFinishTime - hanekeStartTime, libraryType: .haneke))
+                    completion(result: TestResult(libraryName: "Haneke", elapsedTime: hanekeFinishTime - hanekeStartTime, libraryType: .haneke))
                     testNextOperation()
                 }
             })
@@ -60,7 +60,7 @@ enum ImageCacheLibrary:Int {
                     if (image != nil) {
                         let mapleBaconFinishTime = CACurrentMediaTime()
                         print("maple bacon finished in \(mapleBaconFinishTime - mapleBaconStartTime)")
-                        completion(result: TestResult(libraryName: "mapleBacon", elapsedTime: mapleBaconFinishTime - mapleBaconStartTime, libraryType: .mapleBacon))
+                        completion(result: TestResult(libraryName: "MapleBacon", elapsedTime: mapleBaconFinishTime - mapleBaconStartTime, libraryType: .mapleBacon))
                         //model.results.append(TestResult(libraryName: "mapleBacon", elapsedTime: mapleBaconFinishTime - mapleBaconStartTime, libraryType: .mapleBacon))
                     } else {
                         print("maple bacon failed")
@@ -75,7 +75,7 @@ enum ImageCacheLibrary:Int {
                     let imageLoaderEndTime = CACurrentMediaTime()
                     if (image != nil) {
                         print("ImageLoader finished in \(imageLoaderEndTime - imageLoaderStartTime) seconds")
-                        completion(result: TestResult(libraryName: "imageLoader", elapsedTime: imageLoaderEndTime - imageLoaderStartTime, libraryType: .imageLoader))
+                        completion(result: TestResult(libraryName: "SwiftImageLoader", elapsedTime: imageLoaderEndTime - imageLoaderStartTime, libraryType: .imageLoader))
                     } else {
                         print("ImageLoader failed.")
                     }
@@ -90,7 +90,7 @@ enum ImageCacheLibrary:Int {
                     if let img = resp.result.value {
                         let alamofireEndTime = CACurrentMediaTime()
                         print("alamofire finished in \(alamofireEndTime - alamofireStartTime) seconds")
-                        completion(result: TestResult(libraryName: "alamoFireImage", elapsedTime: alamofireEndTime - alamofireStartTime, libraryType: .alamofireImage))
+                        completion(result: TestResult(libraryName: "AlamoFireImage", elapsedTime: alamofireEndTime - alamofireStartTime, libraryType: .alamofireImage))
                         imageView.image = img
                     } else {
                         print("alamofire failed")
@@ -107,7 +107,7 @@ enum ImageCacheLibrary:Int {
                     let nukeEndTime = CACurrentMediaTime()
                     if ((task.response?.isSuccess) != nil) {
                         print("nuke finished in \(nukeEndTime - nukeStartTime) seconds")
-                        completion(result: TestResult(libraryName: "nuke", elapsedTime: nukeEndTime - nukeStartTime, libraryType: .nuke))
+                        completion(result: TestResult(libraryName: "Nuke", elapsedTime: nukeEndTime - nukeStartTime, libraryType: .nuke))
                     }
                     testNextOperation()
                 }
@@ -142,8 +142,8 @@ enum ImageCacheLibrary:Int {
         let op = HayabusaOperation(url: url) { (image, error) in
             let endTime = CACurrentMediaTime()
             if image != nil {
-                print("hayabusa finished in \(endTime - startTime) seconds")
-                model.results.append(TestResult(libraryName: "hayabusa", elapsedTime: endTime - startTime, libraryType: .hayabusa))
+                print("ImageURLOperation finished in \(endTime - startTime) seconds")
+                model.results.append(TestResult(libraryName: "ImageURLOperation", elapsedTime: endTime - startTime, libraryType: .hayabusa))
                 NSOperationQueue.mainQueue().addOperationWithBlock({
                     imageView.image = image
                 })
